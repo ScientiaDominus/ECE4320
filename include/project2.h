@@ -1,3 +1,6 @@
+#ifndef PROJECT2_H
+#define PROJECT2_H
+#endif
 #include <Arduino.h>
 #include "pins.h"
 #include "SR04.h"

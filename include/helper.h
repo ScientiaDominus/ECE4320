@@ -1,3 +1,6 @@
+#ifndef HELPER_H
+#define HELPER_H
+#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <Arduino.h>

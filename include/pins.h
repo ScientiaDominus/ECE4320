@@ -1,3 +1,6 @@
+#ifndef PINS_H
+#define PINS_H
+#endif
 //Ultrasonic Sensor Pins
 #define US1_TRIG_PIN 16 //Input for Ultrasonic Sensor
 #define US1_ECHO_PIN 17 //Echo for Ultrasonic Sensor
