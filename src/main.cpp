@@ -44,39 +44,35 @@ const int rolePerMinute = 15;         // Adjustable range of 28BYJ-48 stepper is
 Stepper myStepper(stepsPerRevolution, 8, 10, 9, 11);
 
 void setup() {
-   myStepper.setSpeed(rolePerMinute);
-   pinMode(pirPin, INPUT);
-   Serial.begin(9600);//Initialization of Serial Port
-   delay(1000);
+    myStepper.setSpeed(rolePerMinute);
+    pinMode(pirPin, INPUT);
+    Serial.begin(9600);//Initialization of Serial Port
+    delay(1000);
 }
 
 void loop() {
-   a=sr04.Distance();
-   Serial.print(a);
-   Serial.println("cm");//The difference between "Serial.print" and "Serial.println" 
+    a=sr04.Distance();
+    Serial.print(a);
+    Serial.println("cm");//The difference between "Serial.print" and "Serial.println" 
                         //is that "Serial.println" can change lines.
-   while(a < 15)
-   {
-    a=sr04.Distance();
-    if(steps < stepsPerRevolution)
-    {
-      Serial.print(a);
-      Serial.println("cm");
-      //Serial.println("clockwise");
-      myStepper.step(100);
-      steps += 100;
+    while(a < 15) {
+        a=sr04.Distance();
+        if(steps < stepsPerRevolution) {
+            Serial.print(a);
+            Serial.println("cm");
+            //Serial.println("clockwise");
+            myStepper.step(100);
+            steps += 100;
+        }
     }
-   }
-   while(a >= 15)
-   {
-    a=sr04.Distance();
-    if(steps > 0)
-    {
-      Serial.print(a);
-      Serial.println("cm");
-      //Serial.println("counterclockwise");
-      myStepper.step(-100);
-      steps -= 100 ;
+    while(a >= 15) {
+        a=sr04.Distance();
+        if(steps > 0) {
+            Serial.print(a);
+            Serial.println("cm");
+            //Serial.println("counterclockwise");
+            myStepper.step(-100);
+            steps -= 100 ;
+        }
     }
-   }
 }
