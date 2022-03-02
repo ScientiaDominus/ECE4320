@@ -8,3 +8,5 @@
 
 void monitorUpdate();
 void distanceUpdate();
+void stepMotor(int motor);
+void rvrsMotor(int motor);

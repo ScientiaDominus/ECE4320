@@ -40,25 +40,35 @@ void loop() {
 
     while(dist_1 < 15) {
         distanceUpdate();
-        if(steps_1 < stepsPerRevolution) {
-            Serial.print("Ultrasonic Sensor 1: ");
-            Serial.print(dist_1);
-            Serial.println("cm");
-            //Serial.println("clockwise");
-            stepper_1.step(100);
-            steps_1 += 100;
-        }
+        stepMotor(1);
     }
     while(dist_1 >= 15) {
         distanceUpdate();
-        if(steps_1 > 0) {
-            Serial.print("Ultrasonic Sensor 1: ");
-            Serial.print(dist_1);
-            Serial.println("cm");
-            //Serial.println("counterclockwise");
-            stepper_1.step(-100);
-            steps_1 -= 100 ;
-        }
+        rvrsMotor(1);
+    }
+    while(dist_2 < 15) {
+        distanceUpdate();
+        stepMotor(2);
+    }
+    while(dist_2 >= 15) {
+        distanceUpdate();
+        rvrsMotor(2);
+    }
+    while(dist_3 < 15) {
+        distanceUpdate();
+        stepMotor(3);
+    }
+    while(dist_3 >= 15) {
+        distanceUpdate();
+        rvrsMotor(3);
+    }
+    while(dist_4 < 15) {
+        distanceUpdate();
+        stepMotor(4);
+    }
+    while(dist_4 >= 15) {
+        distanceUpdate();
+        rvrsMotor(4);
     }
 }
 

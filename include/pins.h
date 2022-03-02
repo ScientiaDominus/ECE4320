@@ -41,13 +41,13 @@
 #define LED2_G 4
 #define LED2_B 5 
 
-#define LED2_R 6
-#define LED2_G 7 
-#define LED2_B 8
+#define LED3_R 6
+#define LED3_G 7 
+#define LED3_B 8
 
-#define LED2_R 9
-#define LED2_G 10
-#define LED2_B 11
+#define LED4_R 9
+#define LED4_G 10
+#define LED4_B 11
 
 
 //#define PIR_PIN 7 //input for HC-s501
