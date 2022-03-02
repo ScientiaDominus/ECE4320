@@ -1,73 +1,69 @@
 //www.elegoo.com
 //2016.12.08
 #include <Arduino.h>
+#include "pins.h"
 #include "SR04.h"
 #include "Stepper.h"
-#include "pins.h"
-//#define TRIG_PIN 15
-//#define ECHO_PIN 14 
+#include "project2.h"
+#include "helper.h"
+ 
 
-//Define state machine variables that will control the state of the machine
-int state = 0;
+#include <Audio.h>
+#include <Wire.h>
+#include <SPI.h>
+#include <SD.h>
+#include <SerialFlash.h>
 
-
-SR04 sr04_1 = SR04(US1_ECHO_PIN, US1_TRIG_PIN);
-SR04 sr04_2 = SR04(US2_ECHO_PIN, US2_TRIG_PIN);
-SR04 sr04_3 = SR04(US3_ECHO_PIN, US3_TRIG_PIN);
-SR04 sr04_4 = SR04(US4_ECHO_PIN, US4_TRIG_PIN);
-long dist_1, dist_2, dist_3, dist_4;
-int steps;
-
-const int stepsPerRevolution = 2048;  // change this to fit the number of steps per revolution
-const int rolePerMinute = 15;         // Adjustable range of 28BYJ-48 stepper is 0~17 rpm
-
-// initialize the stepper library on pins 8 through 11:
-Stepper myStepper(stepsPerRevolution, M1_PIN_1, M1_PIN_2, M1_PIN_3, M1_PIN_4);
+// GUItool: begin automatically generated code
+AudioSynthWaveformSine   sine4;          //xy=323.00000381469727,563.0000324249268
+AudioSynthWaveformSine   sine2;          //xy=327.00000381469727,460
+AudioSynthWaveformSine   sine3;          //xy=329.00000381469727,511.00003242492676
+AudioSynthWaveformSine   sine1;          //xy=330.00000381469727,405
+AudioMixer4              mixer1;         //xy=616.0000076293945,471.00000762939453
+AudioOutputMQS           mqs1;           //xy=770.0000114440918,477.4000072479248
+AudioConnection          patchCord1(sine4, 0, mixer1, 3);
+AudioConnection          patchCord2(sine2, 0, mixer1, 1);
+AudioConnection          patchCord3(sine3, 0, mixer1, 2);
+AudioConnection          patchCord4(sine1, 0, mixer1, 0);
+AudioConnection          patchCord5(mixer1, 0, mqs1, 0);
+// GUItool: end automatically generated code
 
 void setup() {
-   myStepper.setSpeed(rolePerMinute);
-   Serial.begin(9600);//Initialization of Serial Port
-   delay(1000);
+    stepper_1.setSpeed(rolePerMinute);
+    stepper_2.setSpeed(rolePerMinute);
+    stepper_3.setSpeed(rolePerMinute);
+    stepper_4.setSpeed(rolePerMinute);
+    Serial.begin(9600);//Initialization of Serial Port
+    delay(1000);
 }
 
 void loop() {
-   dist_1=sr04_1.Distance();
-   dist_2=sr04_2.Distance();
-   dist_3=sr04_3.Distance();
-   dist_4=sr04_4.Distance();
-   Serial.print
-   Serial.print(dist_1);
-   Serial.println("cm");//The difference between "Serial.print" and "Serial.println" 
-                        //is that "Serial.println" can change lines.
-   Serial.print(dist_1);
-   Serial.println("cm");
-   Serial.print(dist_1);
-   Serial.println("cm");
-   Serial.print(dist_1);
-   Serial.println("cm");
-   while(a < 15)
-   {
-     digitalReadFast
-    a=sr04.Distance();
-    if(steps < stepsPerRevolution)
-    {
-      Serial.print(a);
-      Serial.println("cm");
-      //Serial.println("clockwise");
-      myStepper.step(100);
-      steps += 100;
+    
+    //get The distance for the ultrasonic sensors, then print them to the serial monitor
+    distanceUpdate();
+    monitorUpdate();
+
+    while(dist_1 < 15) {
+        distanceUpdate();
+        if(steps_1 < stepsPerRevolution) {
+            Serial.print("Ultrasonic Sensor 1: ");
+            Serial.print(dist_1);
+            Serial.println("cm");
+            //Serial.println("clockwise");
+            stepper_1.step(100);
+            steps_1 += 100;
+        }
     }
-   }
-   while(a >= 15)
-   {
-    a=sr04.Distance();
-    if(steps > 0)
-    {
-      Serial.print(a);
-      Serial.println("cm");
-      //Serial.println("counterclockwise");
-      myStepper.step(-100);
-      steps -= 100 ;
+    while(dist_1 >= 15) {
+        distanceUpdate();
+        if(steps_1 > 0) {
+            Serial.print("Ultrasonic Sensor 1: ");
+            Serial.print(dist_1);
+            Serial.println("cm");
+            //Serial.println("counterclockwise");
+            stepper_1.step(-100);
+            steps_1 -= 100 ;
+        }
     }
-   }
 }
+
