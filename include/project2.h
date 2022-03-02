@@ -1,6 +1,6 @@
 #ifndef PROJECT2_H
 #define PROJECT2_H
-#endif
+
 #include <Arduino.h>
 #include "pins.h"
 #include "SR04.h"
@@ -33,3 +33,5 @@ Stepper stepper_1(stepsPerRevolution, M1_PIN_1, M1_PIN_2, M1_PIN_3, M1_PIN_4);
 Stepper stepper_2(stepsPerRevolution, M2_PIN_1, M2_PIN_2, M2_PIN_3, M2_PIN_4);
 Stepper stepper_3(stepsPerRevolution, M3_PIN_1, M3_PIN_2, M3_PIN_3, M3_PIN_4);
 Stepper stepper_4(stepsPerRevolution, M4_PIN_1, M4_PIN_2, M4_PIN_3, M4_PIN_4);
+
+#endif
