@@ -6,9 +6,13 @@
 #include "SR04.h"
 #include "Stepper.h"
 #include "proj_2_audio.h"
- 
+
+//Define state machine variables that will control the state of the machine
+int state = 0;
+
 void monitorUpdate();
 void distanceUpdate();
+void runMotors();
 void stepMotor(int motor);
 void rvrsMotor(int motor);
 
@@ -16,9 +20,6 @@ SR04 sr04_1 = SR04(US1_ECHO_PIN,US1_TRIG_PIN);
 SR04 sr04_2 = SR04(US2_ECHO_PIN,US2_TRIG_PIN);
 SR04 sr04_3 = SR04(US3_ECHO_PIN,US3_TRIG_PIN);
 SR04 sr04_4 = SR04(US4_ECHO_PIN,US4_TRIG_PIN);
-
-//Define state machine variables that will control the state of the machine
-int state = 0;
 
 //Variables used for sensor arrays
 long dist_1, dist_2, dist_3, dist_4;
@@ -53,6 +54,7 @@ void setup() {
     stepper_3.setSpeed(rolePerMinute);
     stepper_4.setSpeed(rolePerMinute);
     Serial.begin(9600);//Initialization of Serial Port
+    initializeLEDS();
     delay(1000);
 }
 
@@ -61,39 +63,8 @@ void loop() {
     //get The distance for the ultrasonic sensors, then print them to the serial monitor
     distanceUpdate();
     monitorUpdate();
-
-    while(dist_1 < 15) {
-        distanceUpdate();
-        stepMotor(1);
-    }
-    while(dist_1 >= 15) {
-        distanceUpdate();
-        rvrsMotor(1);
-    }
-    while(dist_2 < 15) {
-        distanceUpdate();
-        stepMotor(2);
-    }
-    while(dist_2 >= 15) {
-        distanceUpdate();
-        rvrsMotor(2);
-    }
-    while(dist_3 < 15) {
-        distanceUpdate();
-        stepMotor(3);
-    }
-    while(dist_3 >= 15) {
-        distanceUpdate();
-        rvrsMotor(3);
-    }
-    while(dist_4 < 15) {
-        distanceUpdate();
-        stepMotor(4);
-    }
-    while(dist_4 >= 15) {
-        distanceUpdate();
-        rvrsMotor(4);
-    }
+    runMotors();
+    
 }
 
 void distanceUpdate() {
@@ -118,10 +89,8 @@ void monitorUpdate() {
     Serial.println("cm");
 }
 
-void stepMotor(int motor)
-{
-    switch(motor)
-    {
+void stepMotor(int motor) {
+    switch(motor) {
         case 1:
             if(steps_1 < stepsPerRevolution) {
                     Serial.print("Ultrasonic Sensor 1: ");
@@ -167,10 +136,8 @@ void stepMotor(int motor)
     }
 }
 
-void rvrsMotor(int motor)
-{
-    switch(motor)
-    {
+void rvrsMotor(int motor) {
+    switch(motor) {
         case 1:
             if(steps_1 > 0) {
                 Serial.print("Ultrasonic Sensor 1: ");
@@ -214,4 +181,67 @@ void rvrsMotor(int motor)
         default:
             break;
     }
+}
+
+void runMotors() {
+    while(dist_1 < 15) {
+        distanceUpdate();
+        stepMotor(1);
+    }
+    while(dist_1 >= 15) {
+        distanceUpdate();
+        rvrsMotor(1);
+    }
+    while(dist_2 < 15) {
+        distanceUpdate();
+        stepMotor(2);
+    }
+    while(dist_2 >= 15) {
+        distanceUpdate();
+        rvrsMotor(2);
+    }
+    while(dist_3 < 15) {
+        distanceUpdate();
+        stepMotor(3);
+    }
+    while(dist_3 >= 15) {
+        distanceUpdate();
+        rvrsMotor(3);
+    }
+    while(dist_4 < 15) {
+        distanceUpdate();
+        stepMotor(4);
+    }
+    while(dist_4 >= 15) {
+        distanceUpdate();
+        rvrsMotor(4);
+    }
+}
+
+void initializeLEDS() {
+    pinMode(LED1_R, OUTPUT);
+    pinMode(LED1_G, OUTPUT);
+    pinMode(LED1_B, OUTPUT);
+    pinMode(LED2_R, OUTPUT);
+    pinMode(LED2_G, OUTPUT);
+    pinMode(LED2_B, OUTPUT);
+    pinMode(LED3_R, OUTPUT);
+    pinMode(LED3_G, OUTPUT);
+    pinMode(LED3_B, OUTPUT);
+    pinMode(LED4_R, OUTPUT);
+    pinMode(LED4_G, OUTPUT);
+    pinMode(LED4_B, OUTPUT);
+
+    digitalWrite(LED1_R, LOW);
+    digitalWrite(LED1_G, LOW);
+    digitalWrite(LED1_B, LOW);
+    digitalWrite(LED2_R, LOW);
+    digitalWrite(LED2_G, LOW);
+    digitalWrite(LED2_B, LOW);
+    digitalWrite(LED3_R, LOW);
+    digitalWrite(LED3_G, LOW);
+    digitalWrite(LED3_B, LOW);
+    digitalWrite(LED4_R, LOW);
+    digitalWrite(LED4_G, LOW);
+    digitalWrite(LED4_B, LOW);
 }
