@@ -8,11 +8,15 @@
 #include "proj_2_audio.h"
 
 //Define state machine variables that will control the state of the machine
-int state = 0;
+int state = 0, currentMotor = 0, counter = 0;
+int notes[53] = {4,3,2,3,4,4,4,3,3,3,4,1,1,4,3,2,3,4,4,4,4,3,3,4,3,2,2,4,3,2,3,4,4,4,3,3,3,4,1,1,4,3,2,3,4,4,4,4,3,3,4,3,2};
 
+void stateMachine();
+void updateState();
 void monitorUpdate();
 void distanceUpdate();
 void runMotors();
+void initializeLEDS();
 void stepMotor(int motor);
 void rvrsMotor(int motor);
 
@@ -186,6 +190,7 @@ void rvrsMotor(int motor) {
 void runMotors() {
     while(dist_1 < 15) {
         distanceUpdate();
+        currentMotor = 1;
         stepMotor(1);
     }
     while(dist_1 >= 15) {
@@ -194,6 +199,7 @@ void runMotors() {
     }
     while(dist_2 < 15) {
         distanceUpdate();
+        currentMotor = 2;
         stepMotor(2);
     }
     while(dist_2 >= 15) {
@@ -202,6 +208,7 @@ void runMotors() {
     }
     while(dist_3 < 15) {
         distanceUpdate();
+        currentMotor = 3;
         stepMotor(3);
     }
     while(dist_3 >= 15) {
@@ -210,12 +217,14 @@ void runMotors() {
     }
     while(dist_4 < 15) {
         distanceUpdate();
+        currentMotor = 4;
         stepMotor(4);
     }
     while(dist_4 >= 15) {
         distanceUpdate();
         rvrsMotor(4);
     }
+    currentMotor = 0;
 }
 
 void initializeLEDS() {
@@ -244,4 +253,57 @@ void initializeLEDS() {
     digitalWrite(LED4_R, LOW);
     digitalWrite(LED4_G, LOW);
     digitalWrite(LED4_B, LOW);
+}
+
+void updateState(){
+    if(counter < 53){
+        if(currentMotor == notes[counter]){
+            state = notes[counter + 1];
+            counter++;
+        }
+    }
+    else if(counter >= 53)
+    {
+      counter = 0;
+    }
+}
+
+void stateMachine(){
+    switch(state){
+        case 1:{
+            digitalWrite(LED1_R, HIGH);
+            //play note here
+            if(state != 1){
+                digitalWrite(LED1_R, LOW);
+            }
+            break;
+        }
+        case 2:{
+            digitalWrite(LED2_B, HIGH);
+            //play note here
+            if(state != 2){
+                digitalWrite(LED2_B, LOW);
+            }
+            break;
+        }
+        case 3:{
+            digitalWrite(LED3_G, HIGH);
+            //play note here
+            if(state != 3){
+                digitalWrite(LED3_G, LOW);
+            }
+            break;
+        }
+        case 4:{
+            digitalWrite(LED4_R, HIGH);
+            //play note here
+            if(state != 4){
+                digitalWrite(LED4_R, LOW);
+            }
+            break;
+        }
+        default:{
+
+        }
+    }
 }
