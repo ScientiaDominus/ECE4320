@@ -34,18 +34,47 @@ Stepper stepper_3(stepsPerRevolution, M3_PIN_1, M3_PIN_2, M3_PIN_3, M3_PIN_4);
 Stepper stepper_4(stepsPerRevolution, M4_PIN_1, M4_PIN_2, M4_PIN_3, M4_PIN_4);
 
 void setup() {
+    pinMode(LED1_R, OUTPUT);
+    digitalWriteFast(LED1_R, HIGH);
+    pinMode(LED1_G, OUTPUT);
+    digitalWriteFast(LED1_G, HIGH);
+    pinMode(LED1_B, OUTPUT);
+    digitalWriteFast(LED1_B, HIGH);
+
+    pinMode(LED2_R, OUTPUT);
+    digitalWriteFast(LED2_R, HIGH);
+    pinMode(LED2_G, OUTPUT);
+    digitalWriteFast(LED2_G, HIGH);
+    pinMode(LED2_B, OUTPUT);
+    digitalWriteFast(LED2_B, HIGH);
+
+    pinMode(LED3_R, OUTPUT);
+    digitalWriteFast(LED3_R, HIGH);
+    pinMode(LED3_G, OUTPUT);
+    digitalWriteFast(LED3_G, HIGH);
+    pinMode(LED3_B, OUTPUT);
+    digitalWriteFast(LED3_B, HIGH);
+
+    pinMode(LED4_R, OUTPUT);
+    digitalWriteFast(LED4_R, HIGH);
+    pinMode(LED4_G, OUTPUT);
+    digitalWriteFast(LED4_G, HIGH);
+    pinMode(LED4_B, OUTPUT);
+    digitalWriteFast(LED4_B, HIGH);
+
+
     AudioMemory(20);
 
     sine1.frequency(noteFreq[NOTE_C6]);
     sine1.amplitude(1);
 
-    sine2.frequency(noteFreq[NOTE_D6]);
+    sine2.frequency(noteFreq[NOTE_C7]);
     sine2.amplitude(1);
 
     sine3.frequency(noteFreq[NOTE_E6]);
     sine3.amplitude(1);
 
-    sine4.frequency(noteFreq[NOTE_B5]);
+    sine4.frequency(noteFreq[NOTE_E7]);
     sine4.amplitude(1);
 
     stepper_1.setSpeed(rolePerMinute);
@@ -53,7 +82,31 @@ void setup() {
     stepper_3.setSpeed(rolePerMinute);
     stepper_4.setSpeed(rolePerMinute);
     Serial.begin(9600);//Initialization of Serial Port
+
     delay(1000);
+    for(int i = 0; i <= 11; i++) { digitalWriteFast(i, LOW); }
+
+    digitalWriteFast(LED1_R, HIGH);
+    digitalWriteFast(LED2_R, HIGH);
+    digitalWriteFast(LED3_R, HIGH);
+    digitalWriteFast(LED4_R, HIGH);
+
+    delay(1000);
+    for(int i = 0; i <= 11; i++) { digitalWriteFast(i, LOW); }
+
+    digitalWriteFast(LED1_G, HIGH);
+    digitalWriteFast(LED2_G, HIGH);
+    digitalWriteFast(LED3_G, HIGH);
+    digitalWriteFast(LED4_G, HIGH);
+
+    delay(1000);
+    for(int i = 0; i <= 11; i++) { digitalWriteFast(i, LOW); }
+
+    digitalWriteFast(LED1_B, HIGH);
+    digitalWriteFast(LED2_B, HIGH);
+    digitalWriteFast(LED3_B, HIGH);
+    digitalWriteFast(LED4_B, HIGH);
+
 }
 
 void loop() {
