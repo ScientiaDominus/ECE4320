@@ -2,9 +2,10 @@
 //2016.12.08
 //#include "project2.h"
 #include <Arduino.h>
+#include <Stepper.h>
 #include "pins.h"
 #include "SR04.h"
-#include "Stepper.h"
+//#include "Stepper.h"
 #include "proj_2_audio.h"
 
 //Define state machine variables that will control the state of the machine
@@ -33,10 +34,10 @@ const int stepsPerRevolution = 2048;  // change this to fit the number of steps 
 const int rolePerMinute = 15;         // Adjustable range of 28BYJ-48 stepper is 0~17 rpm
 
 //Stepper Motor Class Definitions
-Stepper stepper_1(stepsPerRevolution, M1_PIN_1, M1_PIN_2, M1_PIN_3, M1_PIN_4);
-Stepper stepper_2(stepsPerRevolution, M2_PIN_1, M2_PIN_2, M2_PIN_3, M2_PIN_4);
-Stepper stepper_3(stepsPerRevolution, M3_PIN_1, M3_PIN_2, M3_PIN_3, M3_PIN_4);
-Stepper stepper_4(stepsPerRevolution, M4_PIN_1, M4_PIN_2, M4_PIN_3, M4_PIN_4);
+Stepper stepper_1(stepsPerRevolution, M1_PIN_1, M1_PIN_3, M1_PIN_2, M1_PIN_4);
+Stepper stepper_2(stepsPerRevolution, M2_PIN_1, M2_PIN_3, M2_PIN_2, M2_PIN_4);
+Stepper stepper_3(stepsPerRevolution, M3_PIN_1, M3_PIN_3, M3_PIN_2, M3_PIN_4);
+Stepper stepper_4(stepsPerRevolution, M4_PIN_1, M4_PIN_3, M4_PIN_2, M4_PIN_4);
 
 void setup() {
     AudioMemory(20);
@@ -65,9 +66,25 @@ void setup() {
 void loop() {
     
     //get The distance for the ultrasonic sensors, then print them to the serial monitor
-    distanceUpdate();
-    monitorUpdate();
-    runMotors();
+    //distanceUpdate();
+    //monitorUpdate();
+    //runMotors();
+    stepper_1.step(2048);
+    delay(500);
+    stepper_2.step(2048);
+    delay(500);
+    stepper_3.step(2048);
+    delay(500);
+    stepper_4.step(2048);
+    delay(500);
+    stepper_1.step(-2048);
+    delay(500);
+    stepper_2.step(-2048);
+    delay(500);
+    stepper_3.step(-2048);
+    delay(500);
+    stepper_4.step(-2048);
+    delay(500);
     
 }
 
@@ -97,40 +114,88 @@ void stepMotor(int motor) {
     switch(motor) {
         case 1:
             if(steps_1 < stepsPerRevolution) {
-                    Serial.print("Ultrasonic Sensor 1: ");
-                    Serial.print(dist_1);
-                    Serial.println("cm");
-                    //Serial.println("clockwise");
-                    stepper_1.step(100);
-                    steps_1 += 100;
+                /*Serial.print("Ultrasonic Sensor 1: ");
+                Serial.print(dist_1);
+                Serial.println("cm");*/
+                //Serial.println("clockwise");
+                digitalWriteFast(M2_PIN_1, LOW);
+                digitalWriteFast(M2_PIN_2, LOW);
+                digitalWriteFast(M2_PIN_3, LOW);
+                digitalWriteFast(M2_PIN_4, LOW);
+                digitalWriteFast(M3_PIN_1, LOW);
+                digitalWriteFast(M3_PIN_2, LOW);
+                digitalWriteFast(M3_PIN_3, LOW);
+                digitalWriteFast(M3_PIN_4, LOW);
+                digitalWriteFast(M4_PIN_1, LOW);
+                digitalWriteFast(M4_PIN_2, LOW);
+                digitalWriteFast(M4_PIN_3, LOW);
+                digitalWriteFast(M4_PIN_4, LOW);
+                stepper_1.step(100);
+                steps_1 += 100;
             }
             break;
         case 2:
             if(steps_2 < stepsPerRevolution) {
-                    Serial.print("Ultrasonic Sensor 2: ");
-                    Serial.print(dist_2);
-                    Serial.println("cm");
-                    //Serial.println("clockwise");
-                    stepper_2.step(100);
-                    steps_2 += 100;
+                /*Serial.print("Ultrasonic Sensor 2: ");
+                Serial.print(dist_2);
+                Serial.println("cm");*/
+                //Serial.println("clockwise");
+                digitalWriteFast(M1_PIN_1, LOW);
+                digitalWriteFast(M1_PIN_2, LOW);
+                digitalWriteFast(M1_PIN_3, LOW);
+                digitalWriteFast(M1_PIN_4, LOW);
+                digitalWriteFast(M3_PIN_1, LOW);
+                digitalWriteFast(M3_PIN_2, LOW);
+                digitalWriteFast(M3_PIN_3, LOW);
+                digitalWriteFast(M3_PIN_4, LOW);
+                digitalWriteFast(M4_PIN_1, LOW);
+                digitalWriteFast(M4_PIN_2, LOW);
+                digitalWriteFast(M4_PIN_3, LOW);
+                digitalWriteFast(M4_PIN_4, LOW);
+                stepper_2.step(100);
+                steps_2 += 100;
             }
             break;
         case 3:
             if(steps_3 < stepsPerRevolution) {
-                Serial.print("Ultrasonic Sensor 3: ");
+                /*Serial.print("Ultrasonic Sensor 3: ");
                 Serial.print(dist_3);
-                Serial.println("cm");
+                Serial.println("cm");*/
                 //Serial.println("clockwise");
+                digitalWriteFast(M2_PIN_1, LOW);
+                digitalWriteFast(M2_PIN_2, LOW);
+                digitalWriteFast(M2_PIN_3, LOW);
+                digitalWriteFast(M2_PIN_4, LOW);
+                digitalWriteFast(M1_PIN_1, LOW);
+                digitalWriteFast(M1_PIN_2, LOW);
+                digitalWriteFast(M1_PIN_3, LOW);
+                digitalWriteFast(M1_PIN_4, LOW);
+                digitalWriteFast(M4_PIN_1, LOW);
+                digitalWriteFast(M4_PIN_2, LOW);
+                digitalWriteFast(M4_PIN_3, LOW);
+                digitalWriteFast(M4_PIN_4, LOW);
                 stepper_3.step(100);
                 steps_3 += 100;
             }
             break;
         case 4:
             if(steps_4 < stepsPerRevolution) {
-                Serial.print("Ultrasonic Sensor 4: ");
+                /*Serial.print("Ultrasonic Sensor 4: ");
                 Serial.print(dist_4);
-                Serial.println("cm");
+                Serial.println("cm");*/
                 //Serial.println("clockwise");
+                digitalWriteFast(M2_PIN_1, LOW);
+                digitalWriteFast(M2_PIN_2, LOW);
+                digitalWriteFast(M2_PIN_3, LOW);
+                digitalWriteFast(M2_PIN_4, LOW);
+                digitalWriteFast(M3_PIN_1, LOW);
+                digitalWriteFast(M3_PIN_2, LOW);
+                digitalWriteFast(M3_PIN_3, LOW);
+                digitalWriteFast(M3_PIN_4, LOW);
+                digitalWriteFast(M1_PIN_1, LOW);
+                digitalWriteFast(M1_PIN_2, LOW);
+                digitalWriteFast(M1_PIN_3, LOW);
+                digitalWriteFast(M1_PIN_4, LOW);
                 stepper_4.step(100);
                 steps_4 += 100;
             }
@@ -144,40 +209,88 @@ void rvrsMotor(int motor) {
     switch(motor) {
         case 1:
             if(steps_1 > 0) {
-                Serial.print("Ultrasonic Sensor 1: ");
+                /*Serial.print("Ultrasonic Sensor 1: ");
                 Serial.print(dist_1);
                 Serial.println("cm");
-                //Serial.println("counterclockwise");
+                //Serial.println("counterclockwise");*/
+                digitalWriteFast(M2_PIN_1, LOW);
+                digitalWriteFast(M2_PIN_2, LOW);
+                digitalWriteFast(M2_PIN_3, LOW);
+                digitalWriteFast(M2_PIN_4, LOW);
+                digitalWriteFast(M3_PIN_1, LOW);
+                digitalWriteFast(M3_PIN_2, LOW);
+                digitalWriteFast(M3_PIN_3, LOW);
+                digitalWriteFast(M3_PIN_4, LOW);
+                digitalWriteFast(M4_PIN_1, LOW);
+                digitalWriteFast(M4_PIN_2, LOW);
+                digitalWriteFast(M4_PIN_3, LOW);
+                digitalWriteFast(M4_PIN_4, LOW);
                 stepper_1.step(-100);
                 steps_1 -= 100 ;
             }
             break;
         case 2:
             if(steps_2 > 0) {
-                Serial.print("Ultrasonic Sensor 2: ");
+                /*Serial.print("Ultrasonic Sensor 2: ");
                 Serial.print(dist_2);
                 Serial.println("cm");
-                //Serial.println("counterclockwise");
+                //Serial.println("counterclockwise");*/
+                digitalWriteFast(M1_PIN_1, LOW);
+                digitalWriteFast(M1_PIN_2, LOW);
+                digitalWriteFast(M1_PIN_3, LOW);
+                digitalWriteFast(M1_PIN_4, LOW);
+                digitalWriteFast(M3_PIN_1, LOW);
+                digitalWriteFast(M3_PIN_2, LOW);
+                digitalWriteFast(M3_PIN_3, LOW);
+                digitalWriteFast(M3_PIN_4, LOW);
+                digitalWriteFast(M4_PIN_1, LOW);
+                digitalWriteFast(M4_PIN_2, LOW);
+                digitalWriteFast(M4_PIN_3, LOW);
+                digitalWriteFast(M4_PIN_4, LOW);
                 stepper_2.step(-100);
                 steps_2 -= 100 ;
             }
             break;
         case 3:
             if(steps_3 > 0) {
-                Serial.print("Ultrasonic Sensor 3: ");
+                /*Serial.print("Ultrasonic Sensor 3: ");
                 Serial.print(dist_3);
                 Serial.println("cm");
-                //Serial.println("counterclockwise");
+                //Serial.println("counterclockwise");*/
+                digitalWriteFast(M2_PIN_1, LOW);
+                digitalWriteFast(M2_PIN_2, LOW);
+                digitalWriteFast(M2_PIN_3, LOW);
+                digitalWriteFast(M2_PIN_4, LOW);
+                digitalWriteFast(M1_PIN_1, LOW);
+                digitalWriteFast(M1_PIN_2, LOW);
+                digitalWriteFast(M1_PIN_3, LOW);
+                digitalWriteFast(M1_PIN_4, LOW);
+                digitalWriteFast(M4_PIN_1, LOW);
+                digitalWriteFast(M4_PIN_2, LOW);
+                digitalWriteFast(M4_PIN_3, LOW);
+                digitalWriteFast(M4_PIN_4, LOW);
                 stepper_3.step(-100);
                 steps_3 -= 100 ;
             }
             break;
         case 4:
             if(steps_4 > 0) {
-                Serial.print("Ultrasonic Sensor 4: ");
+                /*Serial.print("Ultrasonic Sensor 4: ");
                 Serial.print(dist_4);
                 Serial.println("cm");
-                //Serial.println("counterclockwise");
+                //Serial.println("counterclockwise");*/
+                digitalWriteFast(M2_PIN_1, LOW);
+                digitalWriteFast(M2_PIN_2, LOW);
+                digitalWriteFast(M2_PIN_3, LOW);
+                digitalWriteFast(M2_PIN_4, LOW);
+                digitalWriteFast(M3_PIN_1, LOW);
+                digitalWriteFast(M3_PIN_2, LOW);
+                digitalWriteFast(M3_PIN_3, LOW);
+                digitalWriteFast(M3_PIN_4, LOW);
+                digitalWriteFast(M1_PIN_1, LOW);
+                digitalWriteFast(M1_PIN_2, LOW);
+                digitalWriteFast(M1_PIN_3, LOW);
+                digitalWriteFast(M1_PIN_4, LOW);
                 stepper_4.step(-100);
                 steps_4 -= 100 ;
             }
@@ -188,42 +301,57 @@ void rvrsMotor(int motor) {
 }
 
 void runMotors() {
-    while(dist_1 < 15) {
-        distanceUpdate();
+    distanceUpdate();
+    if(dist_1 < 15) {
+        //distanceUpdate();
         currentMotor = 1;
+        digitalWriteFast(LED1_R, HIGH);
         stepMotor(1);
     }
-    while(dist_1 >= 15) {
-        distanceUpdate();
+    else if(dist_1 >= 15) {
+        //distanceUpdate();
+        digitalWriteFast(LED1_B, HIGH);
         rvrsMotor(1);
     }
-    while(dist_2 < 15) {
-        distanceUpdate();
+    if(dist_2 < 15) {
+        //distanceUpdate();
         currentMotor = 2;
         stepMotor(2);
     }
-    while(dist_2 >= 15) {
-        distanceUpdate();
+    else if(dist_2 >= 15) {
+        //distanceUpdate();
         rvrsMotor(2);
     }
-    while(dist_3 < 15) {
-        distanceUpdate();
+    if(dist_3 < 15) {
+        //distanceUpdate();
         currentMotor = 3;
         stepMotor(3);
     }
-    while(dist_3 >= 15) {
-        distanceUpdate();
+    else if(dist_3 >= 15) {
+        //distanceUpdate();
         rvrsMotor(3);
     }
-    while(dist_4 < 15) {
-        distanceUpdate();
+    if(dist_4 < 15) {
+        //distanceUpdate();
         currentMotor = 4;
         stepMotor(4);
     }
-    while(dist_4 >= 15) {
-        distanceUpdate();
+    else if(dist_4 >= 15) {
+        //distanceUpdate();
         rvrsMotor(4);
     }
+    digitalWriteFast(LED1_R, LOW);
+    digitalWriteFast(LED1_G, LOW);
+    digitalWriteFast(LED1_B, LOW);
+    digitalWriteFast(LED2_R, LOW);
+    digitalWriteFast(LED2_G, LOW);
+    digitalWriteFast(LED2_B, LOW);
+    digitalWriteFast(LED3_R, LOW);
+    digitalWriteFast(LED3_G, LOW);
+    digitalWriteFast(LED3_B, LOW);
+    digitalWriteFast(LED4_R, LOW);
+    digitalWriteFast(LED4_G, LOW);
+    digitalWriteFast(LED4_B, LOW);
     currentMotor = 0;
 }
 
@@ -241,18 +369,18 @@ void initializeLEDS() {
     pinMode(LED4_G, OUTPUT);
     pinMode(LED4_B, OUTPUT);
 
-    digitalWrite(LED1_R, LOW);
-    digitalWrite(LED1_G, LOW);
-    digitalWrite(LED1_B, LOW);
-    digitalWrite(LED2_R, LOW);
-    digitalWrite(LED2_G, LOW);
-    digitalWrite(LED2_B, LOW);
-    digitalWrite(LED3_R, LOW);
-    digitalWrite(LED3_G, LOW);
-    digitalWrite(LED3_B, LOW);
-    digitalWrite(LED4_R, LOW);
-    digitalWrite(LED4_G, LOW);
-    digitalWrite(LED4_B, LOW);
+    digitalWriteFast(LED1_R, LOW);
+    digitalWriteFast(LED1_G, LOW);
+    digitalWriteFast(LED1_B, LOW);
+    digitalWriteFast(LED2_R, LOW);
+    digitalWriteFast(LED2_G, LOW);
+    digitalWriteFast(LED2_B, LOW);
+    digitalWriteFast(LED3_R, LOW);
+    digitalWriteFast(LED3_G, LOW);
+    digitalWriteFast(LED3_B, LOW);
+    digitalWriteFast(LED4_R, LOW);
+    digitalWriteFast(LED4_G, LOW);
+    digitalWriteFast(LED4_B, LOW);
 }
 
 void updateState(){
@@ -271,34 +399,34 @@ void updateState(){
 void stateMachine(){
     switch(state){
         case 1:{
-            digitalWrite(LED1_R, HIGH);
+            digitalWriteFast(LED1_R, HIGH);
             //play note here
             if(state != 1){
-                digitalWrite(LED1_R, LOW);
+                digitalWriteFast(LED1_R, LOW);
             }
             break;
         }
         case 2:{
-            digitalWrite(LED2_B, HIGH);
+            digitalWriteFast(LED2_B, HIGH);
             //play note here
             if(state != 2){
-                digitalWrite(LED2_B, LOW);
+                digitalWriteFast(LED2_B, LOW);
             }
             break;
         }
         case 3:{
-            digitalWrite(LED3_G, HIGH);
+            digitalWriteFast(LED3_G, HIGH);
             //play note here
             if(state != 3){
-                digitalWrite(LED3_G, LOW);
+                digitalWriteFast(LED3_G, LOW);
             }
             break;
         }
         case 4:{
-            digitalWrite(LED4_R, HIGH);
+            digitalWriteFast(LED4_R, HIGH);
             //play note here
             if(state != 4){
-                digitalWrite(LED4_R, LOW);
+                digitalWriteFast(LED4_R, LOW);
             }
             break;
         }
