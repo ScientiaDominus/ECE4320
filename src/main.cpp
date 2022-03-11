@@ -31,6 +31,7 @@ SR04 sr04_4 = SR04(US4_ECHO_PIN,US4_TRIG_PIN);
 //Variables used for sensor arrays
 long dist_1, dist_2, dist_3, dist_4;
 int steps_1, steps_2, steps_3, steps_4;
+elapsedMillis ledTimer;
 
 const int stepsPerRevolution = 2048;  // change this to fit the number of steps per revolution
 const int rolePerMinute = 15;         // Adjustable range of 28BYJ-48 stepper is 0~17 rpm
@@ -43,7 +44,7 @@ Stepper stepper_4(stepsPerRevolution, M4_PIN_1, M4_PIN_3, M4_PIN_2, M4_PIN_4);
 
 void setup() {
     AudioMemory(20);
-
+    pinMode(LED_BUILTIN, OUTPUT);
     sine1.frequency(noteFreq[NOTE_C6]);
     sine1.amplitude(1);
 
@@ -63,33 +64,48 @@ void setup() {
     Serial.begin(9600);//Initialization of Serial Port
     initializeLEDS();
     delay(1000);
+    digitalWriteFast(LED1_R, HIGH);
+    digitalWriteFast(LED1_G, HIGH);
+    digitalWriteFast(LED1_B, HIGH);
+    digitalWriteFast(LED2_R, HIGH);
+    digitalWriteFast(LED2_G, HIGH);
+    digitalWriteFast(LED2_B, HIGH);
+    digitalWriteFast(LED3_R, HIGH);
+    digitalWriteFast(LED3_G, HIGH);
+    digitalWriteFast(LED3_B, HIGH);
+    digitalWriteFast(LED4_R, HIGH);
+    digitalWriteFast(LED4_G, HIGH);
+    digitalWriteFast(LED4_B, HIGH);
+    clearLEDS();
 }
 
 void loop() {
-    
+    if(ledTimer >= 1000) { // heartbeat led
+        digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN));
+        ledTimer = 0;
+    }
     //get The distance for the ultrasonic sensors, then print them to the serial monitor
-    //distanceUpdate();
-    //monitorUpdate();
-    //updateState();
-    //stateMachine();
-    //runMotors();
-
-    stepper_1.step(2048);
-    delay(500);
+    distanceUpdate();
+    monitorUpdate();
+    updateState();
+    stateMachine();
+    runMotors();
+    /*stepper_1.step(2048);
+    //delay(500);
     stepper_2.step(2048);
-    delay(500);
+    //delay(500);
     stepper_3.step(2048);
-    delay(500);
+    //delay(500);
     stepper_4.step(2048);
-    delay(500);
+    //delay(500);
     stepper_1.step(-2048);
-    delay(500);
+    //delay(500);
     stepper_2.step(-2048);
-    delay(500);
+    //delay(500);
     stepper_3.step(-2048);
-    delay(500);
+    //delay(500);
     stepper_4.step(-2048);
-    delay(500);
+    //delay(500);*/
     
 }
 
@@ -124,6 +140,7 @@ void stepMotor(int motor) {
                 Serial.print(dist_1);
                 Serial.println("cm");*/
                 //Serial.println("clockwise");
+                digitalWriteFast(LED1_G, HIGH);
                 stepper_1.step(100);
                 steps_1 += 100;
             }
@@ -134,6 +151,7 @@ void stepMotor(int motor) {
                 Serial.print(dist_2);
                 Serial.println("cm");*/
                 //Serial.println("clockwise");
+                digitalWriteFast(LED2_G, HIGH);
                 stepper_2.step(100);
                 steps_2 += 100;
             }
@@ -144,6 +162,7 @@ void stepMotor(int motor) {
                 Serial.print(dist_3);
                 Serial.println("cm");*/
                 //Serial.println("clockwise");
+                digitalWriteFast(LED3_G, HIGH);
                 stepper_3.step(100);
                 steps_3 += 100;
             }
@@ -154,6 +173,7 @@ void stepMotor(int motor) {
                 Serial.print(dist_4);
                 Serial.println("cm");*/
                 //Serial.println("clockwise");
+                digitalWriteFast(LED4_G, HIGH);
                 stepper_4.step(100);
                 steps_4 += 100;
             }
@@ -172,6 +192,7 @@ void rvrsMotor(int motor) {
                 Serial.print(dist_1);
                 Serial.println("cm");
                 //Serial.println("counterclockwise");*/
+                digitalWriteFast(LED1_R, HIGH);
                 stepper_1.step(-100);
                 steps_1 -= 100 ;
             }
@@ -182,6 +203,7 @@ void rvrsMotor(int motor) {
                 Serial.print(dist_2);
                 Serial.println("cm");
                 //Serial.println("counterclockwise");*/
+                digitalWriteFast(LED2_R, HIGH);
                 stepper_2.step(-100);
                 steps_2 -= 100 ;
             }
@@ -192,6 +214,7 @@ void rvrsMotor(int motor) {
                 Serial.print(dist_3);
                 Serial.println("cm");
                 //Serial.println("counterclockwise");*/
+                digitalWriteFast(LED3_R, HIGH);
                 stepper_3.step(-100);
                 steps_3 -= 100 ;
             }
@@ -202,6 +225,7 @@ void rvrsMotor(int motor) {
                 Serial.print(dist_4);
                 Serial.println("cm");
                 //Serial.println("counterclockwise");*/
+                digitalWriteFast(LED4_R, HIGH);
                 stepper_4.step(-100);
                 steps_4 -= 100 ;
             }
@@ -213,57 +237,55 @@ void rvrsMotor(int motor) {
 
 void runMotors() {
     distanceUpdate();
+    clearLEDS();
     if(dist_1 < 15) {
         //distanceUpdate();
         currentMotor = 1;
-        digitalWriteFast(LED1_R, HIGH);
         //play note here
         stepMotor(1);
     }
     else if(dist_1 >= 15) {
         //distanceUpdate();
-        digitalWriteFast(LED1_B, HIGH);
+        //digitalWriteFast(LED1_G, HIGH);
         //play note here
         rvrsMotor(1);
     }
+
     if(dist_2 < 15) {
         //distanceUpdate();
         currentMotor = 2;
-        digitalWriteFast(LED2_R, HIGH);
         //play note here
         stepMotor(2);
     }
     else if(dist_2 >= 15) {
         //distanceUpdate();
-        digitalWriteFast(LED2_B, HIGH);
+        //digitalWriteFast(LED2_G, HIGH);
         rvrsMotor(2);
     }
+
     if(dist_3 < 15) {
         //distanceUpdate();
         currentMotor = 3;
-        digitalWriteFast(LED3_R, HIGH);
         //play note here
         stepMotor(3);
     }
     else if(dist_3 >= 15) {
         //distanceUpdate();
-        digitalWriteFast(LED3_B, HIGH);
+        //digitalWriteFast(LED3_G, HIGH);
         rvrsMotor(3);
     }
+
     if(dist_4 < 15) {
         //distanceUpdate();
         currentMotor = 4;
-        digitalWriteFast(LED4_R, HIGH);
         //play note here
         stepMotor(4);
     }
     else if(dist_4 >= 15) {
         //distanceUpdate();
-        digitalWriteFast(LED4_B, HIGH);
+        //digitalWriteFast(LED4_G, HIGH);
         rvrsMotor(4);
     }
-    clearLEDS();
-    currentMotor = 0;
 }
 
 void initializeLEDS() {
@@ -284,18 +306,58 @@ void initializeLEDS() {
 }
 
 void clearLEDS(){
+    switch (state){
+        case 1:{
+            //digitalWriteFast(LED1_B, LOW);
+            digitalWriteFast(LED2_B, LOW);
+            digitalWriteFast(LED3_B, LOW);
+            digitalWriteFast(LED4_B, LOW);
+            break;
+        }
+        case 2:{
+            digitalWriteFast(LED1_B, LOW);
+            //digitalWriteFast(LED2_B, LOW);
+            digitalWriteFast(LED3_B, LOW);
+            digitalWriteFast(LED4_B, LOW);
+            break;
+        }
+
+        case 3:{
+            digitalWriteFast(LED1_B, LOW);
+            digitalWriteFast(LED2_B, LOW);
+            //digitalWriteFast(LED3_B, LOW);
+            digitalWriteFast(LED4_B, LOW);
+            break;
+        }
+
+        case 4:{
+            digitalWriteFast(LED1_B, LOW);
+            digitalWriteFast(LED2_B, LOW);
+            digitalWriteFast(LED3_B, LOW);
+            //digitalWriteFast(LED4_B, LOW);
+        }
+
+        default:{
+            digitalWriteFast(LED1_B, LOW);
+            digitalWriteFast(LED2_B, LOW);
+            digitalWriteFast(LED3_B, LOW);
+            digitalWriteFast(LED4_B, LOW);
+            break;
+        }
+
+    }
     digitalWriteFast(LED1_R, LOW);
     digitalWriteFast(LED1_G, LOW);
-    digitalWriteFast(LED1_B, LOW);
+    //digitalWriteFast(LED1_B, LOW);
     digitalWriteFast(LED2_R, LOW);
     digitalWriteFast(LED2_G, LOW);
-    digitalWriteFast(LED2_B, LOW);
+    //digitalWriteFast(LED2_B, LOW);
     digitalWriteFast(LED3_R, LOW);
     digitalWriteFast(LED3_G, LOW);
-    digitalWriteFast(LED3_B, LOW);
+    //digitalWriteFast(LED3_B, LOW);
     digitalWriteFast(LED4_R, LOW);
     digitalWriteFast(LED4_G, LOW);
-    digitalWriteFast(LED4_B, LOW);
+    //digitalWriteFast(LED4_B, LOW);
 }
 
 void updateState(){
@@ -313,10 +375,10 @@ void updateState(){
 void stateMachine(){
     switch(state){
         case 1:{
-            digitalWriteFast(LED1_R, HIGH);
+            digitalWriteFast(LED1_B, HIGH);
             
             if(state != 1){
-                digitalWriteFast(LED1_R, LOW);
+                digitalWriteFast(LED1_B, LOW);
             }
             break;
         }
@@ -329,23 +391,23 @@ void stateMachine(){
             break;
         }
         case 3:{
-            digitalWriteFast(LED3_G, HIGH);
+            digitalWriteFast(LED3_B, HIGH);
             
             if(state != 3){
-                digitalWriteFast(LED3_G, LOW);
+                digitalWriteFast(LED3_B, LOW);
             }
             break;
         }
         case 4:{
-            digitalWriteFast(LED4_R, HIGH);
+            digitalWriteFast(LED4_B, HIGH);
             
             if(state != 4){
-                digitalWriteFast(LED4_R, LOW);
+                digitalWriteFast(LED4_B, LOW);
             }
             break;
         }
         default:{
-
+            break;
         }
     }
 }
@@ -413,7 +475,7 @@ void killMotors(int select){
             break;
         }
         default:{
-
+            break;
         }
     }
 }
