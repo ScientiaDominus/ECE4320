@@ -17,7 +17,9 @@ void updateState();
 void monitorUpdate();
 void distanceUpdate();
 void runMotors();
+void killMotors(int select);
 void initializeLEDS();
+void clearLEDS();
 void stepMotor(int motor);
 void rvrsMotor(int motor);
 
@@ -68,7 +70,10 @@ void loop() {
     //get The distance for the ultrasonic sensors, then print them to the serial monitor
     //distanceUpdate();
     //monitorUpdate();
+    //updateState();
+    //stateMachine();
     //runMotors();
+
     stepper_1.step(2048);
     delay(500);
     stepper_2.step(2048);
@@ -111,6 +116,7 @@ void monitorUpdate() {
 }
 
 void stepMotor(int motor) {
+    killMotors(motor);
     switch(motor) {
         case 1:
             if(steps_1 < stepsPerRevolution) {
@@ -118,18 +124,6 @@ void stepMotor(int motor) {
                 Serial.print(dist_1);
                 Serial.println("cm");*/
                 //Serial.println("clockwise");
-                digitalWriteFast(M2_PIN_1, LOW);
-                digitalWriteFast(M2_PIN_2, LOW);
-                digitalWriteFast(M2_PIN_3, LOW);
-                digitalWriteFast(M2_PIN_4, LOW);
-                digitalWriteFast(M3_PIN_1, LOW);
-                digitalWriteFast(M3_PIN_2, LOW);
-                digitalWriteFast(M3_PIN_3, LOW);
-                digitalWriteFast(M3_PIN_4, LOW);
-                digitalWriteFast(M4_PIN_1, LOW);
-                digitalWriteFast(M4_PIN_2, LOW);
-                digitalWriteFast(M4_PIN_3, LOW);
-                digitalWriteFast(M4_PIN_4, LOW);
                 stepper_1.step(100);
                 steps_1 += 100;
             }
@@ -140,18 +134,6 @@ void stepMotor(int motor) {
                 Serial.print(dist_2);
                 Serial.println("cm");*/
                 //Serial.println("clockwise");
-                digitalWriteFast(M1_PIN_1, LOW);
-                digitalWriteFast(M1_PIN_2, LOW);
-                digitalWriteFast(M1_PIN_3, LOW);
-                digitalWriteFast(M1_PIN_4, LOW);
-                digitalWriteFast(M3_PIN_1, LOW);
-                digitalWriteFast(M3_PIN_2, LOW);
-                digitalWriteFast(M3_PIN_3, LOW);
-                digitalWriteFast(M3_PIN_4, LOW);
-                digitalWriteFast(M4_PIN_1, LOW);
-                digitalWriteFast(M4_PIN_2, LOW);
-                digitalWriteFast(M4_PIN_3, LOW);
-                digitalWriteFast(M4_PIN_4, LOW);
                 stepper_2.step(100);
                 steps_2 += 100;
             }
@@ -162,18 +144,6 @@ void stepMotor(int motor) {
                 Serial.print(dist_3);
                 Serial.println("cm");*/
                 //Serial.println("clockwise");
-                digitalWriteFast(M2_PIN_1, LOW);
-                digitalWriteFast(M2_PIN_2, LOW);
-                digitalWriteFast(M2_PIN_3, LOW);
-                digitalWriteFast(M2_PIN_4, LOW);
-                digitalWriteFast(M1_PIN_1, LOW);
-                digitalWriteFast(M1_PIN_2, LOW);
-                digitalWriteFast(M1_PIN_3, LOW);
-                digitalWriteFast(M1_PIN_4, LOW);
-                digitalWriteFast(M4_PIN_1, LOW);
-                digitalWriteFast(M4_PIN_2, LOW);
-                digitalWriteFast(M4_PIN_3, LOW);
-                digitalWriteFast(M4_PIN_4, LOW);
                 stepper_3.step(100);
                 steps_3 += 100;
             }
@@ -184,18 +154,6 @@ void stepMotor(int motor) {
                 Serial.print(dist_4);
                 Serial.println("cm");*/
                 //Serial.println("clockwise");
-                digitalWriteFast(M2_PIN_1, LOW);
-                digitalWriteFast(M2_PIN_2, LOW);
-                digitalWriteFast(M2_PIN_3, LOW);
-                digitalWriteFast(M2_PIN_4, LOW);
-                digitalWriteFast(M3_PIN_1, LOW);
-                digitalWriteFast(M3_PIN_2, LOW);
-                digitalWriteFast(M3_PIN_3, LOW);
-                digitalWriteFast(M3_PIN_4, LOW);
-                digitalWriteFast(M1_PIN_1, LOW);
-                digitalWriteFast(M1_PIN_2, LOW);
-                digitalWriteFast(M1_PIN_3, LOW);
-                digitalWriteFast(M1_PIN_4, LOW);
                 stepper_4.step(100);
                 steps_4 += 100;
             }
@@ -206,6 +164,7 @@ void stepMotor(int motor) {
 }
 
 void rvrsMotor(int motor) {
+    killMotors(motor);
     switch(motor) {
         case 1:
             if(steps_1 > 0) {
@@ -213,18 +172,6 @@ void rvrsMotor(int motor) {
                 Serial.print(dist_1);
                 Serial.println("cm");
                 //Serial.println("counterclockwise");*/
-                digitalWriteFast(M2_PIN_1, LOW);
-                digitalWriteFast(M2_PIN_2, LOW);
-                digitalWriteFast(M2_PIN_3, LOW);
-                digitalWriteFast(M2_PIN_4, LOW);
-                digitalWriteFast(M3_PIN_1, LOW);
-                digitalWriteFast(M3_PIN_2, LOW);
-                digitalWriteFast(M3_PIN_3, LOW);
-                digitalWriteFast(M3_PIN_4, LOW);
-                digitalWriteFast(M4_PIN_1, LOW);
-                digitalWriteFast(M4_PIN_2, LOW);
-                digitalWriteFast(M4_PIN_3, LOW);
-                digitalWriteFast(M4_PIN_4, LOW);
                 stepper_1.step(-100);
                 steps_1 -= 100 ;
             }
@@ -235,18 +182,6 @@ void rvrsMotor(int motor) {
                 Serial.print(dist_2);
                 Serial.println("cm");
                 //Serial.println("counterclockwise");*/
-                digitalWriteFast(M1_PIN_1, LOW);
-                digitalWriteFast(M1_PIN_2, LOW);
-                digitalWriteFast(M1_PIN_3, LOW);
-                digitalWriteFast(M1_PIN_4, LOW);
-                digitalWriteFast(M3_PIN_1, LOW);
-                digitalWriteFast(M3_PIN_2, LOW);
-                digitalWriteFast(M3_PIN_3, LOW);
-                digitalWriteFast(M3_PIN_4, LOW);
-                digitalWriteFast(M4_PIN_1, LOW);
-                digitalWriteFast(M4_PIN_2, LOW);
-                digitalWriteFast(M4_PIN_3, LOW);
-                digitalWriteFast(M4_PIN_4, LOW);
                 stepper_2.step(-100);
                 steps_2 -= 100 ;
             }
@@ -257,18 +192,6 @@ void rvrsMotor(int motor) {
                 Serial.print(dist_3);
                 Serial.println("cm");
                 //Serial.println("counterclockwise");*/
-                digitalWriteFast(M2_PIN_1, LOW);
-                digitalWriteFast(M2_PIN_2, LOW);
-                digitalWriteFast(M2_PIN_3, LOW);
-                digitalWriteFast(M2_PIN_4, LOW);
-                digitalWriteFast(M1_PIN_1, LOW);
-                digitalWriteFast(M1_PIN_2, LOW);
-                digitalWriteFast(M1_PIN_3, LOW);
-                digitalWriteFast(M1_PIN_4, LOW);
-                digitalWriteFast(M4_PIN_1, LOW);
-                digitalWriteFast(M4_PIN_2, LOW);
-                digitalWriteFast(M4_PIN_3, LOW);
-                digitalWriteFast(M4_PIN_4, LOW);
                 stepper_3.step(-100);
                 steps_3 -= 100 ;
             }
@@ -279,18 +202,6 @@ void rvrsMotor(int motor) {
                 Serial.print(dist_4);
                 Serial.println("cm");
                 //Serial.println("counterclockwise");*/
-                digitalWriteFast(M2_PIN_1, LOW);
-                digitalWriteFast(M2_PIN_2, LOW);
-                digitalWriteFast(M2_PIN_3, LOW);
-                digitalWriteFast(M2_PIN_4, LOW);
-                digitalWriteFast(M3_PIN_1, LOW);
-                digitalWriteFast(M3_PIN_2, LOW);
-                digitalWriteFast(M3_PIN_3, LOW);
-                digitalWriteFast(M3_PIN_4, LOW);
-                digitalWriteFast(M1_PIN_1, LOW);
-                digitalWriteFast(M1_PIN_2, LOW);
-                digitalWriteFast(M1_PIN_3, LOW);
-                digitalWriteFast(M1_PIN_4, LOW);
                 stepper_4.step(-100);
                 steps_4 -= 100 ;
             }
@@ -306,52 +217,52 @@ void runMotors() {
         //distanceUpdate();
         currentMotor = 1;
         digitalWriteFast(LED1_R, HIGH);
+        //play note here
         stepMotor(1);
     }
     else if(dist_1 >= 15) {
         //distanceUpdate();
         digitalWriteFast(LED1_B, HIGH);
+        //play note here
         rvrsMotor(1);
     }
     if(dist_2 < 15) {
         //distanceUpdate();
         currentMotor = 2;
+        digitalWriteFast(LED2_R, HIGH);
+        //play note here
         stepMotor(2);
     }
     else if(dist_2 >= 15) {
         //distanceUpdate();
+        digitalWriteFast(LED2_B, HIGH);
         rvrsMotor(2);
     }
     if(dist_3 < 15) {
         //distanceUpdate();
         currentMotor = 3;
+        digitalWriteFast(LED3_R, HIGH);
+        //play note here
         stepMotor(3);
     }
     else if(dist_3 >= 15) {
         //distanceUpdate();
+        digitalWriteFast(LED3_B, HIGH);
         rvrsMotor(3);
     }
     if(dist_4 < 15) {
         //distanceUpdate();
         currentMotor = 4;
+        digitalWriteFast(LED4_R, HIGH);
+        //play note here
         stepMotor(4);
     }
     else if(dist_4 >= 15) {
         //distanceUpdate();
+        digitalWriteFast(LED4_B, HIGH);
         rvrsMotor(4);
     }
-    digitalWriteFast(LED1_R, LOW);
-    digitalWriteFast(LED1_G, LOW);
-    digitalWriteFast(LED1_B, LOW);
-    digitalWriteFast(LED2_R, LOW);
-    digitalWriteFast(LED2_G, LOW);
-    digitalWriteFast(LED2_B, LOW);
-    digitalWriteFast(LED3_R, LOW);
-    digitalWriteFast(LED3_G, LOW);
-    digitalWriteFast(LED3_B, LOW);
-    digitalWriteFast(LED4_R, LOW);
-    digitalWriteFast(LED4_G, LOW);
-    digitalWriteFast(LED4_B, LOW);
+    clearLEDS();
     currentMotor = 0;
 }
 
@@ -369,6 +280,10 @@ void initializeLEDS() {
     pinMode(LED4_G, OUTPUT);
     pinMode(LED4_B, OUTPUT);
 
+    clearLEDS();
+}
+
+void clearLEDS(){
     digitalWriteFast(LED1_R, LOW);
     digitalWriteFast(LED1_G, LOW);
     digitalWriteFast(LED1_B, LOW);
@@ -390,9 +305,8 @@ void updateState(){
             counter++;
         }
     }
-    else if(counter >= 53)
-    {
-      counter = 0;
+    else if(counter >= 53){
+        counter = 0;
     }
 }
 
@@ -400,7 +314,7 @@ void stateMachine(){
     switch(state){
         case 1:{
             digitalWriteFast(LED1_R, HIGH);
-            //play note here
+            
             if(state != 1){
                 digitalWriteFast(LED1_R, LOW);
             }
@@ -408,7 +322,7 @@ void stateMachine(){
         }
         case 2:{
             digitalWriteFast(LED2_B, HIGH);
-            //play note here
+            
             if(state != 2){
                 digitalWriteFast(LED2_B, LOW);
             }
@@ -416,7 +330,7 @@ void stateMachine(){
         }
         case 3:{
             digitalWriteFast(LED3_G, HIGH);
-            //play note here
+            
             if(state != 3){
                 digitalWriteFast(LED3_G, LOW);
             }
@@ -424,10 +338,78 @@ void stateMachine(){
         }
         case 4:{
             digitalWriteFast(LED4_R, HIGH);
-            //play note here
+            
             if(state != 4){
                 digitalWriteFast(LED4_R, LOW);
             }
+            break;
+        }
+        default:{
+
+        }
+    }
+}
+
+void killMotors(int select){
+    switch(select){
+        case 1:{
+            digitalWriteFast(M2_PIN_1, LOW);
+            digitalWriteFast(M2_PIN_2, LOW);
+            digitalWriteFast(M2_PIN_3, LOW);
+            digitalWriteFast(M2_PIN_4, LOW);
+            digitalWriteFast(M3_PIN_1, LOW);
+            digitalWriteFast(M3_PIN_2, LOW);
+            digitalWriteFast(M3_PIN_3, LOW);
+            digitalWriteFast(M3_PIN_4, LOW);
+            digitalWriteFast(M4_PIN_1, LOW);
+            digitalWriteFast(M4_PIN_2, LOW);
+            digitalWriteFast(M4_PIN_3, LOW);
+            digitalWriteFast(M4_PIN_4, LOW);
+            break;
+        }
+        case 2:{
+            digitalWriteFast(M1_PIN_1, LOW);
+            digitalWriteFast(M1_PIN_2, LOW);
+            digitalWriteFast(M1_PIN_3, LOW);
+            digitalWriteFast(M1_PIN_4, LOW);
+            digitalWriteFast(M3_PIN_1, LOW);
+            digitalWriteFast(M3_PIN_2, LOW);
+            digitalWriteFast(M3_PIN_3, LOW);
+            digitalWriteFast(M3_PIN_4, LOW);
+            digitalWriteFast(M4_PIN_1, LOW);
+            digitalWriteFast(M4_PIN_2, LOW);
+            digitalWriteFast(M4_PIN_3, LOW);
+            digitalWriteFast(M4_PIN_4, LOW);
+            break;
+        }
+        case 3:{
+            digitalWriteFast(M2_PIN_1, LOW);
+            digitalWriteFast(M2_PIN_2, LOW);
+            digitalWriteFast(M2_PIN_3, LOW);
+            digitalWriteFast(M2_PIN_4, LOW);
+            digitalWriteFast(M1_PIN_1, LOW);
+            digitalWriteFast(M1_PIN_2, LOW);
+            digitalWriteFast(M1_PIN_3, LOW);
+            digitalWriteFast(M1_PIN_4, LOW);
+            digitalWriteFast(M4_PIN_1, LOW);
+            digitalWriteFast(M4_PIN_2, LOW);
+            digitalWriteFast(M4_PIN_3, LOW);
+            digitalWriteFast(M4_PIN_4, LOW);
+            break;
+        }
+        case 4:{
+            digitalWriteFast(M2_PIN_1, LOW);
+            digitalWriteFast(M2_PIN_2, LOW);
+            digitalWriteFast(M2_PIN_3, LOW);
+            digitalWriteFast(M2_PIN_4, LOW);
+            digitalWriteFast(M3_PIN_1, LOW);
+            digitalWriteFast(M3_PIN_2, LOW);
+            digitalWriteFast(M3_PIN_3, LOW);
+            digitalWriteFast(M3_PIN_4, LOW);
+            digitalWriteFast(M1_PIN_1, LOW);
+            digitalWriteFast(M1_PIN_2, LOW);
+            digitalWriteFast(M1_PIN_3, LOW);
+            digitalWriteFast(M1_PIN_4, LOW);
             break;
         }
         default:{
