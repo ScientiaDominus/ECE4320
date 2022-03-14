@@ -30,10 +30,10 @@ SR04 sr04_4 = SR04(US4_ECHO_PIN,US4_TRIG_PIN);
 
 //Variables used for sensor arrays
 long dist_1, dist_2, dist_3, dist_4;
-int steps_1, steps_2, steps_3, steps_4;
+int steps_1 = 0, steps_2 = 0, steps_3 = 0, steps_4 = 0;
 elapsedMillis ledTimer;
 
-const int stepsPerRevolution = 2048;  // change this to fit the number of steps per revolution
+const int stepsPerRevolution = 2000;  // change this to fit the number of steps per revolution
 const int rolePerMinute = 15;         // Adjustable range of 28BYJ-48 stepper is 0~17 rpm
 
 //Stepper Motor Class Definitions
@@ -63,7 +63,7 @@ void setup() {
     stepper_4.setSpeed(rolePerMinute);
     Serial.begin(9600);//Initialization of Serial Port
     initializeLEDS();
-    delay(1000);
+    
     digitalWriteFast(LED1_R, HIGH);
     digitalWriteFast(LED1_G, HIGH);
     digitalWriteFast(LED1_B, HIGH);
@@ -76,6 +76,9 @@ void setup() {
     digitalWriteFast(LED4_R, HIGH);
     digitalWriteFast(LED4_G, HIGH);
     digitalWriteFast(LED4_B, HIGH);
+
+    delay(1000);
+
     clearLEDS();
 }
 
@@ -90,22 +93,11 @@ void loop() {
     updateState();
     stateMachine();
     runMotors();
-    /*stepper_1.step(2048);
-    //delay(500);
-    stepper_2.step(2048);
-    //delay(500);
-    stepper_3.step(2048);
-    //delay(500);
-    stepper_4.step(2048);
-    //delay(500);
-    stepper_1.step(-2048);
-    //delay(500);
-    stepper_2.step(-2048);
-    //delay(500);
-    stepper_3.step(-2048);
-    //delay(500);
-    stepper_4.step(-2048);
-    //delay(500);*/
+
+    sine1.amplitude(steps_1/(float)stepsPerRevolution);
+    sine2.amplitude(steps_2/(float)stepsPerRevolution);
+    sine3.amplitude(steps_3/(float)stepsPerRevolution);
+    sine4.amplitude(steps_4/(float)stepsPerRevolution);
     
 }
 
