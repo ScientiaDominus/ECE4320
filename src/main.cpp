@@ -9,8 +9,15 @@
 #include "proj_2_audio.h"
 
 //Define state machine variables that will control the state of the machine
-int state = 0, currentMotor = 0, counter = 0;
-int notes[53] = {4,3,2,3,4,4,4,3,3,3,4,1,1,4,3,2,3,4,4,4,4,3,3,4,3,2,2,4,3,2,3,4,4,4,3,3,3,4,1,1,4,3,2,3,4,4,4,4,3,3,4,3,2};
+int state = 4, currentMotor = 0, counter = 0, funMode = 0;
+int notes[74] = {4,3,2,3,4,0,4,0,4,0,
+                 3,0,3,0,3,4,1,1,4,3,
+                 2,3,4,0,4,0,4,0,4,0,
+                 3,0,3,4,3,2,0,2,4,3,
+                 2,3,4,0,4,0,4,0,3,0,
+                 3,0,3,4,1,0,1,4,3,2,
+                 3,4,0,4,0,4,0,4,3,0,
+                 3,4,3,2};
 
 void stateMachine();
 void updateState();
@@ -20,6 +27,7 @@ void runMotors();
 void killMotors(int select);
 void initializeLEDS();
 void clearLEDS();
+void button();
 void stepMotor(int motor);
 void rvrsMotor(int motor);
 
@@ -33,7 +41,8 @@ long dist_1, dist_2, dist_3, dist_4;
 int steps_1 = 0, steps_2 = 0, steps_3 = 0, steps_4 = 0;
 elapsedMillis ledTimer;
 
-const int stepsPerRevolution = 2000;  // change this to fit the number of steps per revolution
+const int stepsPerRevolution = 1000;  // change this to fit the number of steps per revolution
+const int numSteps = 100;
 const int rolePerMinute = 15;         // Adjustable range of 28BYJ-48 stepper is 0~17 rpm
 
 //Stepper Motor Class Definitions
@@ -45,17 +54,19 @@ Stepper stepper_4(stepsPerRevolution, M4_PIN_1, M4_PIN_3, M4_PIN_2, M4_PIN_4);
 void setup() {
     AudioMemory(20);
     pinMode(LED_BUILTIN, OUTPUT);
+    pinMode(BUTTON, INPUT_PULLUP);
+    attachInterrupt(digitalPinToInterrupt(BUTTON), button, RISING);
     sine1.frequency(noteFreq[NOTE_C6]);
-    sine1.amplitude(1);
+    sine1.amplitude(0);
 
     sine2.frequency(noteFreq[NOTE_D6]);
-    sine2.amplitude(1);
+    sine2.amplitude(0);
 
     sine3.frequency(noteFreq[NOTE_E6]);
-    sine3.amplitude(1);
+    sine3.amplitude(0);
 
     sine4.frequency(noteFreq[NOTE_B5]);
-    sine4.amplitude(1);
+    sine4.amplitude(0);
 
     stepper_1.setSpeed(rolePerMinute);
     stepper_2.setSpeed(rolePerMinute);
@@ -93,11 +104,12 @@ void loop() {
     updateState();
     stateMachine();
     runMotors();
-
-    sine1.amplitude(steps_1/(float)stepsPerRevolution);
-    sine2.amplitude(steps_2/(float)stepsPerRevolution);
-    sine3.amplitude(steps_3/(float)stepsPerRevolution);
-    sine4.amplitude(steps_4/(float)stepsPerRevolution);
+    if(funMode == 0){
+        sine1.amplitude(steps_1/(float)stepsPerRevolution);
+        sine2.amplitude(steps_2/(float)stepsPerRevolution);
+        sine3.amplitude(steps_3/(float)stepsPerRevolution);
+        sine4.amplitude(steps_4/(float)stepsPerRevolution);
+    }
     
 }
 
@@ -132,9 +144,10 @@ void stepMotor(int motor) {
                 Serial.print(dist_1);
                 Serial.println("cm");*/
                 //Serial.println("clockwise");
+                if(funMode == 1){sine1.amplitude(.9);}
                 digitalWriteFast(LED1_G, HIGH);
-                stepper_1.step(100);
-                steps_1 += 100;
+                stepper_1.step(numSteps);
+                steps_1 += numSteps;
             }
             break;
         case 2:
@@ -144,8 +157,9 @@ void stepMotor(int motor) {
                 Serial.println("cm");*/
                 //Serial.println("clockwise");
                 digitalWriteFast(LED2_G, HIGH);
-                stepper_2.step(100);
-                steps_2 += 100;
+                if(funMode == 1){sine2.amplitude(.9);}
+                stepper_2.step(numSteps);
+                steps_2 += numSteps;
             }
             break;
         case 3:
@@ -155,8 +169,9 @@ void stepMotor(int motor) {
                 Serial.println("cm");*/
                 //Serial.println("clockwise");
                 digitalWriteFast(LED3_G, HIGH);
-                stepper_3.step(100);
-                steps_3 += 100;
+                if(funMode == 1){sine3.amplitude(.9);}
+                stepper_3.step(numSteps);
+                steps_3 += numSteps;
             }
             break;
         case 4:
@@ -166,8 +181,9 @@ void stepMotor(int motor) {
                 Serial.println("cm");*/
                 //Serial.println("clockwise");
                 digitalWriteFast(LED4_G, HIGH);
-                stepper_4.step(100);
-                steps_4 += 100;
+                if(funMode == 1){sine4.amplitude(.9);}
+                stepper_4.step(numSteps);
+                steps_4 += numSteps;
             }
             break;
         default:
@@ -185,8 +201,9 @@ void rvrsMotor(int motor) {
                 Serial.println("cm");
                 //Serial.println("counterclockwise");*/
                 digitalWriteFast(LED1_R, HIGH);
-                stepper_1.step(-100);
-                steps_1 -= 100 ;
+                if(funMode == 1){sine1.amplitude(0);}
+                stepper_1.step(-numSteps);
+                steps_1 -= numSteps ;
             }
             break;
         case 2:
@@ -196,8 +213,9 @@ void rvrsMotor(int motor) {
                 Serial.println("cm");
                 //Serial.println("counterclockwise");*/
                 digitalWriteFast(LED2_R, HIGH);
-                stepper_2.step(-100);
-                steps_2 -= 100 ;
+                if(funMode == 1){sine2.amplitude(0);}
+                stepper_2.step(-numSteps);
+                steps_2 -= numSteps ;
             }
             break;
         case 3:
@@ -207,8 +225,9 @@ void rvrsMotor(int motor) {
                 Serial.println("cm");
                 //Serial.println("counterclockwise");*/
                 digitalWriteFast(LED3_R, HIGH);
-                stepper_3.step(-100);
-                steps_3 -= 100 ;
+                if(funMode == 1){sine3.amplitude(0);}
+                stepper_3.step(-numSteps);
+                steps_3 -= numSteps ;
             }
             break;
         case 4:
@@ -217,9 +236,10 @@ void rvrsMotor(int motor) {
                 Serial.print(dist_4);
                 Serial.println("cm");
                 //Serial.println("counterclockwise");*/
+                if(funMode == 1){sine4.amplitude(0);}
                 digitalWriteFast(LED4_R, HIGH);
-                stepper_4.step(-100);
-                steps_4 -= 100 ;
+                stepper_4.step(-numSteps);
+                steps_4 -= numSteps ;
             }
             break;
         default:
@@ -327,6 +347,7 @@ void clearLEDS(){
             digitalWriteFast(LED2_B, LOW);
             digitalWriteFast(LED3_B, LOW);
             //digitalWriteFast(LED4_B, LOW);
+            break;
         }
 
         default:{
@@ -353,13 +374,18 @@ void clearLEDS(){
 }
 
 void updateState(){
-    if(counter < 53){
+    if(counter < 74){
         if(currentMotor == notes[counter]){
             state = notes[counter + 1];
             counter++;
         }
+        else if(notes[counter] == 0)
+        {
+            state = notes[counter + 1];
+            counter++;
+        }
     }
-    else if(counter >= 53){
+    else if(counter >= 74){
         counter = 0;
     }
 }
@@ -399,6 +425,7 @@ void stateMachine(){
             break;
         }
         default:{
+            //if(funMode == 1){delay(500);}
             break;
         }
     }
@@ -470,4 +497,8 @@ void killMotors(int select){
             break;
         }
     }
+}
+
+void button(){
+    funMode = !funMode;
 }
